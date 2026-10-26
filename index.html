@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full bg-[#FAF6EE]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>دار الحرفية | عين صالح</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- خطوط عربية فاخرة -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- إعدادات تطبيق الهاتف والظهور على الشاشة الرئيسية -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#A3432B">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="دار الحرفية">
+  <link rel="apple-touch-icon" href="icon-192.jpg">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sahara: {
+              clay: '#A3432B',       /* طين أحمر صحراوي */
+              deepClay: '#7A2C1A',   /* طين داكن */
+              dune: '#D97736',       /* رمل الكثبان */
+              gold: '#E0A944',       /* ذهبي صحراوي */
+              palm: '#2C6E49',       /* أخضر واحات النخيل */
+              sand: '#FAF6EE',       /* خلفية رملية */
+              dark: '#2B1D15'        /* بني غامق للنصوص */
+            }
+          },
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            tajawal: ['Tajawal', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    input, textarea, select {
+      user-select: auto;
+    }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: #FAF6EE;
+      color: #2B1D15;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scroll {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .glass-nav {
+      background: rgba(250, 246, 238, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    /* لمسة شباح عائمة */
+    .shbah-icon {
+      filter: drop-shadow(0 2px 4px rgba(163, 67, 43, 0.15));
+      transition: transform 0.2s ease-in-out;
+    }
+    .shbah-card:active .shbah-icon {
+      transform: scale(1.15) rotate(4deg);
+    }
+  </style>
+</head>
+
+<body class="h-full text-sahara-dark antialiased flex flex-col justify-between max-w-md mx-auto relative shadow-2xl bg-[#FAF6EE] border-x border-[#EBDCCB]">
+
+  <!-- ================= TOP HEADER ================= -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#EBDCCB] px-4 py-2.5 flex items-center justify-between shadow-xs">
+    <div class="flex items-center gap-2">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sahara-deepClay to-sahara-dune flex items-center justify-center text-white shadow-md shadow-sahara-dune/20">
+        <i class="fa-solid fa-hand-holding-heart text-lg"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <h1 class="text-lg font-black font-cairo tracking-tight text-sahara-clay">دار الحِرفية</h1>
+          <span class="text-[9px] bg-amber-100 text-sahara-deepClay font-extrabold px-2 py-0.5 rounded-full border border-amber-200">عين صالح 🌴</span>
+        </div>
+        <p class="text-[10px] text-stone-500 leading-tight">سوق إبداعات المرأة والماكثة بالبيت في تديكلت</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="toggleAuthModal()" id="userHeaderBtn" class="flex items-center gap-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs px-2.5 py-1.5 rounded-xl font-bold transition">
+        <i class="fa-regular fa-user text-sahara-clay"></i>
+        <span id="userHeaderName">دخول</span>
+      </button>
+     <button onclick="requestAdminAccess()" title="المديرة فقط" class="w-8 h-8 rounded-xl bg-sahara-dark text-sahara-gold flex items-center justify-center hover:bg-black transition shadow-xs">
+        <i class="fa-solid fa-lock text-xs"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="flex-1 overflow-y-auto custom-scroll pb-24" id="mainContainer">
+
+    <!-- ================= TAB 1: MARKETPLACE ================= -->
+    <section id="tab-market" class="space-y-4 pt-3 pb-6">
+      
+      <!-- Search & Zone Filter -->
+      <div class="px-4 space-y-2">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3 text-stone-400 text-sm"></i>
+          <input 
+            type="text" 
+            id="searchInput"
+            oninput="handleSearch()"
+            placeholder="ابحثي عن: توزيعات، مقروط، قندورة، بخور، شخشوخة..." 
+            class="w-full bg-white pr-10 pl-4 py-2.5 rounded-2xl border border-[#EBDCCB] text-xs sm:text-sm focus:outline-none focus:border-sahara-clay focus:ring-2 focus:ring-sahara-clay/10 transition shadow-xs"
+          />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            <select id="wilayaFilter" onchange="filterProducts()" class="w-full bg-white text-xs border border-[#EBDCCB] rounded-xl px-3 py-2 text-stone-800 font-semibold focus:outline-none">
+              <option value="all">📍 جميع قصور وأحياء عين صالح</option>
+            </select>
+          </div>
+          <span id="itemsFoundBadge" class="text-[11px] font-bold text-stone-600 bg-white border border-[#EBDCCB] px-2.5 py-2 rounded-xl whitespace-nowrap">
+            6 معروضات
+          </span>
+        </div>
+      </div>
+
+      <!-- Categories Hub (Grid with Shbah / Food & Craft Embellishments) -->
+      <div class="px-4 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold font-cairo text-stone-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-sparkles text-sahara-gold"></i>
+            مجالات الإبداع المنزلي (اضغطي للانضمام)
+          </span>
+          <span class="text-[10px] text-sahara-clay font-bold cursor-pointer" onclick="selectCategory('all')">عرض الكل</span>
+        </div>
+        
+        <!-- Grid of 12 Specialties with Food & Craft Shbah -->
+        <div class="grid grid-cols-3 gap-2" id="craftCategoriesHub">
+          <!-- Injected via JS with emojis & titles -->
+        </div>
+      </div>
+
+      <!-- Warm Desert Banner -->
+      <div class="px-4">
+        <div class="bg-gradient-to-l from-sahara-deepClay via-sahara-clay to-sahara-dune text-white rounded-3xl p-4 shadow-lg shadow-sahara-clay/20 relative overflow-hidden">
+          <div class="relative z-10 space-y-1.5 max-w-[75%]">
+            <span class="inline-block bg-white/20 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-xs">
+              صُنع بأيدي نساء عين صالح 🌴
+            </span>
+            <h2 class="text-base font-black font-cairo leading-snug">اطلبي مباشرة من أيدي الحرفيات دون وسيط!</h2>
+            <p class="text-[11px] text-amber-100">توزيعات، أطباق، حلويات أعراس وخياطة حتى باب دارك.</p>
+          </div>
+          <!-- ديكور شباح صحراوي في الخلفية -->
+          <div class="absolute -left-3 -bottom-3 text-white/10 text-7xl transform -rotate-12 select-none">
+            🥘
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="px-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold font-cairo text-stone-800 flex items-center gap-1.5">
+            <span>أحدث المعروضات في عين صالح</span>
+            <span class="w-2 h-2 rounded-full bg-sahara-palm animate-pulse"></span>
+          </h3>
+          <span class="text-[10px] text-stone-400">تواصل مباشر واتساب</span>
+        </div>
+
+        <div id="productsGrid" class="grid grid-cols-2 gap-3"></div>
+         <!-- Empty search state -->
+        <div id="noProductsFound" class="hidden text-center py-10 bg-white rounded-3xl border border-dashed border-[#EBDCCB] p-6">
+          <div class="w-12 h-12 mx-auto rounded-full bg-stone-100 flex items-center justify-center text-stone-400 mb-2">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+          </div>
+          <p class="text-xs font-bold text-stone-700">لم نجد معروضات في هذا التخصص أو الحي حالياً</p>
+          <p class="text-[10px] text-stone-400 mt-1">كوني أنتِ أول حرفية تفتح متجرها هنا مجاناً لمدة 15 يوماً!</p>
+          <button onclick="switchTab('seller-join')" class="mt-3 bg-sahara-clay text-white text-xs font-bold px-4 py-1.5 rounded-xl">
+            سجلي معنا في 15 يوم مجاناً
+          </button>
+        </div>
+      </div>
+
+      <!-- Free 15 Days Notice Card -->
+      <div class="px-4">
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-3xl p-3.5 flex items-center justify-between shadow-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-2xl bg-amber-100 text-sahara-deepClay flex items-center justify-center text-lg font-bold">
+              🎁
+            </div>
+            <div>
+              <p class="text-xs font-bold text-stone-900">عرض الانطلاقة بعين صالح</p>
+              <p class="text-[10px] text-stone-600">سجلي واعرضي منتجاتكِ مجاناً لمدة 15 يوماً كاملة!</p>
+            </div>
+          </div>
+          <button onclick="selectSellerPlan('الباقة المجانية التجريبية (15 يوم باطل)', 0)" class="bg-sahara-deepClay text-white text-[11px] font-bold px-3 py-2 rounded-xl whitespace-nowrap shadow-xs hover:bg-black transition">
+            ابدئي مجاناً
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= TAB 2: SELLER REGISTRATION & PLANS ================= -->
+    <section id="tab-seller-join" class="hidden space-y-4 px-4 pt-3 pb-8">
+      
+      <div class="text-center space-y-1">
+        <span class="text-[10px] font-extrabold text-sahara-deepClay bg-amber-100 px-3 py-1 rounded-full border border-amber-200">
+          شاركي إبداعكِ المنزلي مع أهل عين صالح
+        </span>
+        <h2 class="text-xl font-black font-cairo text-stone-900">باقات انضمام الحرفيات</h2>
+        <p class="text-xs text-stone-500 max-w-xs mx-auto">
+          اختاري الباقة المناسبة وسنتواصل معكِ فوراً لتفعيل متجرك وتأكيد طلبك!
+        </p>
+      </div>
+
+      <!-- 4 Subscription Tiers: Free 15 Days, Monthly, Quarterly, Yearly -->
+      <div class="space-y-2.5">
+        
+        <!-- 1. Free Trial 15 Days -->
+        <div class="border-2 border-emerald-500 bg-emerald-50/40 rounded-3xl p-3.5 space-y-2 hover:border-emerald-600 transition cursor-pointer relative" onclick="selectSellerPlan('الباقة المجانية التجريبية (15 يوم باطل)', 0)">
+          <div class="absolute -top-2.5 left-5 bg-emerald-600 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
+            هدية الانطلاقة 🎉
+          </div>
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-sm font-bold font-cairo text-emerald-950">الباقة التجريبية المجانية</h3>
+              <p class="text-[10px] text-emerald-800">جربي المنصة بدون دفع أي سنتيم</p>
+            </div>
+            <div class="text-left">
+              <span class="text-base font-black font-cairo text-emerald-700">0 دج</span>
+              <span class="text-[9px] text-stone-500 block">15 يوماً كاملة</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-emerald-900 border-t border-emerald-200/60 pt-2">
+            <span class="text-[11px]"><i class="fa-solid fa-check text-emerald-600"></i> نشر متجرك في أحياء عين صالح</span>
+            <button class="text-emerald-700 font-bold text-xs">اختيار مجاني ←</button>
+          </div>
+        </div>
+        <!-- 2. Monthly Plan -->
+        <div class="border-2 border-[#EBDCCB] bg-white rounded-3xl p-3.5 space-y-2 hover:border-sahara-clay transition cursor-pointer" onclick="selectSellerPlan('الباقة الشهرية (1000 دج/شهر)', 1000)">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-sm font-bold font-cairo text-stone-800">الباقة الشهرية</h3>
+              <p class="text-[10px] text-stone-500">لعرض حتى 10 معروضات مع تواصل مباشر</p>
+            </div>
+            <div class="text-left">
+              <span class="text-base font-black font-cairo text-sahara-deepClay">1,000 دج</span>
+              <span class="text-[9px] text-stone-400 block">شهر كامل</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-stone-600 border-t border-stone-100 pt-2">
+            <span class="text-[11px]"><i class="fa-solid fa-check text-sahara-palm"></i> صفحة متجر في عين صالح</span>
+            <button class="text-sahara-clay font-bold text-xs">تحديد الباقة ←</button>
+          </div>
+        </div>
+
+        <!-- 3. Quarterly Plan -->
+        <div class="border-2 border-sahara-clay bg-gradient-to-b from-amber-50/50 to-white rounded-3xl p-3.5 space-y-2 relative shadow-md shadow-sahara-clay/10 cursor-pointer" onclick="selectSellerPlan('الباقة الفصلية (2500 دج/3 أشهر)', 2500)">
+          <div class="absolute -top-2.5 left-5 bg-sahara-clay text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
+            الأكثر توفيراً 🔥
+          </div>
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-sm font-bold font-cairo text-stone-900">الباقة الفصلية (3 أشهر)</h3>
+              <p class="text-[10px] text-stone-500">توفير 500 دج + عرض 25 منتجاً</p>
+            </div>
+            <div class="text-left">
+              <span class="text-base font-black font-cairo text-sahara-clay">2,500 دج</span>
+              <span class="text-[9px] text-stone-400 block">لكل 3 أشهر</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-stone-700 border-t border-amber-100 pt-2">
+            <span class="text-[11px] font-semibold"><i class="fa-solid fa-crown text-sahara-gold"></i> شارة "حرفية موثّقة ومضمونة"</span>
+            <button class="bg-sahara-clay text-white text-[10px] font-bold px-3 py-1 rounded-xl">تحديد الباقة</button>
+          </div>
+        </div>
+
+        <!-- 4. Yearly Plan -->
+        <div class="border-2 border-sahara-gold bg-gradient-to-b from-amber-50/40 to-white rounded-3xl p-3.5 space-y-2 relative cursor-pointer" onclick="selectSellerPlan('الباقة السنوية الملكية (8000 دج/سنة)', 8000)">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-sm font-bold font-cairo text-stone-900">الباقة السنوية الملكية</h3>
+              <p class="text-[10px] text-stone-500">وفر 4000 دج + نشر مستمر طوال العام</p>
+            </div>
+            <div class="text-left">
+              <span class="text-base font-black font-cairo text-amber-700">8,000 دج</span>
+              <span class="text-[9px] text-stone-400 block">عام كامل</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-stone-700 border-t border-amber-100 pt-2">
+            <span class="text-[11px]"><i class="fa-solid fa-gem text-amber-600"></i> أولوية الظهور في الصدارة</span>
+            <button class="text-stone-900 font-bold text-xs">تحديد الباقة ←</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Registration Form -->
+      <div class="bg-white border border-[#EBDCCB] rounded-3xl p-4 space-y-3.5 shadow-xs" id="sellerFormAnchor">
+        <div class="border-b pb-2">
+            <h3 class="text-xs font-bold font-cairo text-stone-900 flex items-center gap-2">
+            <i class="fa-solid fa-file-signature text-sahara-clay"></i>
+            استمارة طلب الانضمام لدار الحرفية
+          </h3>
+          <p class="text-[10px] text-stone-500">املئي بياناتكِ وستتواصل معكِ المديرة فوراً عبر الواتساب لتأكيد حسابك</p>
+        </div>
+
+        <form id="sellerRegistrationForm" onsubmit="handleSellerSubmit(event)" class="space-y-3">
+          <div>
+            <label class="block text-[11px] font-bold text-stone-700 mb-1">اسمكِ أو اسم مشروعكِ المنزلي *</label>
+            <input type="text" id="sellerStoreName" required placeholder="مثال: مطبخ واحة تديكلت / لمسات مريم للتوزيعات" class="w-full bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-sahara-clay">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-stone-700 mb-1">المجال / الحرفة *</label>
+              <select id="sellerCategory" required class="w-full bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl px-2 py-2 text-xs focus:outline-none focus:border-sahara-clay">
+                <!-- Injected via JS (12 Specialties) -->
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-stone-700 mb-1">المنطقة في عين صالح *</label>
+              <select id="sellerWilaya" required class="w-full bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl px-2 py-2 text-xs focus:outline-none focus:border-sahara-clay">
+                <!-- Injected via JS (18 Zones) -->
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-stone-700 mb-1">رقم هاتف / واتساب للتواصل مع الزبائن والمديرة *</label>
+            <div class="flex items-center">
+              <span class="bg-stone-200 text-stone-700 text-xs px-2.5 py-2 rounded-r-xl font-mono">+213</span>
+              <input type="tel" id="sellerPhone" required placeholder="0661234567" class="w-full bg-[#FAF6EE] border border-[#EBDCCB] rounded-l-xl px-3 py-2 text-xs focus:outline-none focus:border-sahara-clay">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-stone-700 mb-1">الباقة المختارة *</label>
+            <input type="text" id="sellerSelectedPlan" readonly value="الباقة المجانية التجريبية (15 يوم باطل)" class="w-full bg-emerald-50 text-emerald-900 font-bold border border-emerald-200 rounded-xl px-3 py-2 text-xs">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-stone-700 mb-1">نبذة عن مهاراتك والخدمات التي تقدمينها</label>
+            <textarea id="sellerBio" rows="2" placeholder="مثال: أحضر علب توزيعات العقيقة، حلويات أفراح حسب الطلب مع استلام يد بيد في عين صالح..." class="w-full bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl p-2.5 text-xs focus:outline-none focus:border-sahara-clay"></textarea>
+          </div>
+
+          <!-- Note regarding private WhatsApp confirmation -->
+          <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-2.5 flex items-start gap-2 text-stone-700 text-[10px]">
+            <i class="fa-solid fa-lock text-sahara-clay mt-0.5"></i>
+            <span>
+              <strong>ملاحظة الخصوصية:</strong> عند الضغط على إرسال، ستُفتح محادثة واتساب مع مديرة المنصة لتأكيد معلوماتكِ وخدمتك، وإذا اخترتِ باقة مدفوعة سنرسل لكِ معلومات بريدي موب/CCP في الخاص.
+            </span>
+          </div>
+
+          <button type="submit" class="w-full bg-sahara-clay hover:bg-sahara-deepClay text-white font-bold text-xs py-3 rounded-2xl transition shadow-md flex items-center justify-center gap-2">
+            <i class="fa-brands fa-whatsapp text-white text-sm"></i>
+            <span>إرسال طلب الانضمام للمديرة عبر الواتساب</span>
+          </button>
+        </form>
+      </div>
+
+    </section>
+    <!-- ================= TAB 3: BUYER PROFILE & FAVORITES ================= -->
+    <section id="tab-buyer-profile" class="hidden space-y-4 px-4 pt-3 pb-8">
+      
+      <div class="bg-sahara-dark text-white rounded-3xl p-4 space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-sahara-clay/30 border border-sahara-clay/40 flex items-center justify-center text-sahara-gold text-xl font-bold">
+              <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <div>
+              <h2 id="buyerDisplayName" class="text-sm font-bold font-cairo">حساب الزبونة (مجاني 100%)</h2>
+              <p id="buyerDisplayWilaya" class="text-[10px] text-stone-300">تصفحي واطلبي في عين صالح بكل راحة</p>
+            </div>
+          </div>
+          <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold">عضوية دائمة</span>
+        </div>
+      </div>
+
+      <div id="buyerRegistrationBlock" class="bg-white border border-[#EBDCCB] rounded-3xl p-4 space-y-3 shadow-xs">
+        <div class="border-b pb-2">
+          <h3 class="text-xs font-bold font-cairo text-stone-900 flex items-center gap-2">
+            <i class="fa-solid fa-user-plus text-sahara-palm"></i>
+            تسجيل حساب مشتري مجاناً
+          </h3>
+          <p class="text-[10px] text-stone-500">لا توجد أي رسوم على الزبائن للطلب والتواصل.</p>
+        </div>
+
+        <form onsubmit="handleBuyerSubmit(event)" class="space-y-2.5">
+          <div>
+            <label class="block text-[11px] font-bold text-stone-700 mb-1">الاسم الكريم *</label>
+            <input type="text" id="buyerNameInput" required placeholder="مثال: فاطمة الزهراء" class="w-full bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl px-3 py-2 text-xs focus:outline-none">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-stone-700 mb-1">المنطقة / الحي *</label>
+              <select id="buyerWilayaInput" required class="w-full bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl px-2 py-2 text-xs focus:outline-none"></select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-stone-700 mb-1">رقم الهاتف *</label>
+              <input type="tel" id="buyerPhoneInput" required placeholder="0661..." class="w-full bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl px-3 py-2 text-xs focus:outline-none">
+            </div>
+          </div>
+          <button type="submit" class="w-full bg-sahara-palm hover:bg-emerald-800 text-white font-bold text-xs py-2.5 rounded-xl transition shadow-xs">
+            إنشاء حساب مجاني
+          </button>
+        </form>
+      </div>
+
+      <!-- Favorites -->
+      <div class="bg-white border border-[#EBDCCB] rounded-3xl p-4 space-y-3 shadow-xs">
+        <div class="flex items-center justify-between border-b pb-2">
+          <h3 class="text-xs font-bold font-cairo text-stone-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-heart text-sahara-clay"></i>
+            قائمة المفضلة
+          </h3>
+          <span id="favoritesCount" class="text-[10px] bg-amber-50 text-sahara-deepClay font-bold px-2 py-0.5 rounded-full">0 معروضات</span>
+        </div>
+        <div id="favoritesList" class="space-y-2">
+          <p class="text-center text-xs text-stone-400 py-4">لم تحفظي أي منتج بعد.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= TAB 4: PROTECTED ADMIN DASHBOARD ================= -->
+    <section id="tab-admin" class="hidden space-y-4 px-4 pt-3 pb-8">
+      
+      <div class="bg-sahara-dark text-white rounded-3xl p-4 space-y-3 shadow-lg">
+        <div class="flex items-center justify-between">
+     <div class="flex items-center gap-2">
+            <div class="w-9 h-9 rounded-2xl bg-amber-500/20 text-sahara-gold flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+            <div>
+              <h2 class="text-xs font-bold font-cairo">لوحة مديرة "دار الحِرفية"</h2>
+              <p class="text-[9px] text-stone-400">إدارة حرفيات ومتاجر عين صالح</p>
+            </div>
+          </div>
+          <button onclick="lockAdminSession()" class="text-[10px] bg-red-500/20 text-red-300 border border-red-500/30 px-2.5 py-1 rounded-xl font-bold flex items-center gap-1">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            قفل
+          </button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+          <div class="bg-white/10 rounded-2xl p-2">
+            <span class="text-[9px] text-stone-400 block">إجمالي الاشتراكات</span>
+            <div class="flex items-baseline justify-center gap-0.5 mt-0.5">
+              <span id="adminTotalRevenue" class="text-sm font-black font-cairo text-sahara-gold">12,500</span>
+              <span class="text-[8px] text-stone-300">دج</span>
+            </div>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-2">
+            <span class="text-[9px] text-stone-400 block">المتاجر النشطة</span>
+            <span id="adminActiveCount" class="text-sm font-black font-cairo text-emerald-400">4</span>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-2">
+            <span class="text-[9px] text-stone-400 block">طلبات بانتظار التأكيد</span>
+            <span id="adminPendingCount" class="text-sm font-black font-cairo text-amber-400">1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex bg-stone-200/80 p-1 rounded-2xl text-xs font-bold text-stone-600">
+        <button id="adminSubBtnPending" onclick="switchAdminView('pending')" class="flex-1 py-1.5 rounded-xl bg-white text-stone-900 shadow-xs flex items-center justify-center gap-1 transition">
+          <i class="fa-solid fa-clock-rotate-left text-amber-600 text-[11px]"></i>
+          <span>الطلبات المعلقة</span>
+          <span id="pendingBadgeSub" class="bg-amber-100 text-amber-900 text-[9px] px-1.5 rounded-full font-bold">1</span>
+        </button>
+        <button id="adminSubBtnActive" onclick="switchAdminView('active')" class="flex-1 py-1.5 rounded-xl text-stone-600 flex items-center justify-center gap-1 transition">
+          <i class="fa-solid fa-circle-check text-emerald-600 text-[11px]"></i>
+          <span>الحرفيات المفعلات</span>
+        </button>
+      </div>
+
+      <div id="adminViewPending" class="space-y-3">
+        <div id="adminPendingContainer" class="space-y-2.5"></div>
+      </div>
+
+      <div id="adminViewActive" class="hidden space-y-3">
+        <div id="adminActiveContainer" class="space-y-2"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ================= BOTTOM NAVIGATION BAR ================= -->
+  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-nav border-t border-[#EBDCCB] px-5 py-2 z-40">
+    <div class="flex items-center justify-between">
+      
+      <button onclick="switchTab('market')" id="nav-btn-market" class="flex flex-col items-center gap-0.5 text-sahara-clay transition">
+        <i class="fa-solid fa-store text-base"></i>
+        <span class="text-[10px] font-bold">السوق</span>
+      </button>
+
+      <button onclick="switchTab('seller-join')" id="nav-btn-seller-join" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-stone-700 transition">
+        <div class="w-9 h-9 -mt-4 rounded-2xl bg-gradient-to-tr from-sahara-deepClay to-sahara-clay text-white flex items-center justify-center shadow-md shadow-sahara-clay/30 border-2 border-white">
+          <i class="fa-solid fa-plus text-sm"></i>
+        </div>
+        <span class="text-[10px] font-bold">تسجيل حرفية</span>
+      </button>
+             <button onclick="switchTab('buyer-profile')" id="nav-btn-buyer-profile" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-stone-700 transition">
+        <i class="fa-solid fa-heart text-base"></i>
+        <span class="text-[10px] font-bold">الزبونة</span>
+      </button>
+
+      <button onclick="requestAdminAccess()" id="nav-btn-admin" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-stone-700 transition relative">
+        <i class="fa-solid fa-shield-halved text-base"></i>
+        <span class="text-[10px] font-bold">المديرة</span>
+        <span id="navAdminBadge" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Admin PIN Modal (PIN: 2026) -->
+  <div id="adminPinModal" class="fixed inset-0 bg-black/70 z-50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-5 max-w-xs w-full space-y-3.5 text-center">
+      <div class="w-12 h-12 mx-auto rounded-2xl bg-sahara-dark text-sahara-gold flex items-center justify-center text-xl">
+        <i class="fa-solid fa-key"></i>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold font-cairo text-stone-900">منطقة المديرة الخاصة</h3>
+        <p class="text-[10px] text-stone-500">أدخلي الرمز السري للتحكم في المنصة</p>
+      </div>
+      <input type="password" id="adminPinInput" placeholder="الرمز (الافتراضي: 2026)" class="w-full text-center tracking-widest text-base font-bold bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl py-2 focus:outline-none focus:border-sahara-clay">
+      <div class="flex gap-2">
+        <button onclick="verifyAdminPin()" class="flex-1 bg-sahara-dark hover:bg-black text-white text-xs font-bold py-2.5 rounded-xl transition">
+          دخول
+        </button>
+        <button onclick="closeAdminPinModal()" class="px-3 bg-stone-100 text-stone-600 text-xs font-bold py-2.5 rounded-xl">
+          إلغاء
+        </button>
+      </div>
+      <p class="text-[9px] text-stone-400">الرمز السري: <strong class="text-stone-700">2026</strong></p>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="productDetailModal" class="fixed inset-0 bg-black/60 z-50 backdrop-blur-xs hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[90vh] overflow-y-auto custom-scroll p-4 space-y-3.5">
+      <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex items-center gap-1.5">
+          <span id="pModalWilaya" class="text-[10px] font-bold bg-amber-50 text-sahara-deepClay border border-amber-200 px-2 py-0.5 rounded-full">عين صالح</span>
+          <span id="pModalPlan" class="text-[10px] font-bold bg-emerald-50 text-sahara-palm border border-emerald-200 px-2 py-0.5 rounded-full">حرفية معتمدة</span>
+        </div>
+        <button onclick="closeProductModal()" class="w-7 h-7 rounded-full bg-stone-100 flex items-center justify-center text-stone-500">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden aspect-video bg-stone-100 relative">
+        <img id="pModalImg" src="" alt="Craft" class="w-full h-full object-cover">
+        <div class="absolute bottom-2 right-2 bg-stone-900/85 backdrop-blur-md text-white text-xs font-black px-2.5 py-1 rounded-xl">
+          <span id="pModalPrice"></span> دج
+        </div>
+      </div>
+
+      <div>
+        <h3 id="pModalTitle" class="text-base font-bold font-cairo text-stone-900"></h3>
+        <p id="pModalCategory" class="text-[11px] text-sahara-clay font-bold mt-0.5"></p>
+        <p id="pModalDesc" class="text-xs text-stone-600 mt-2 leading-relaxed"></p>
+      </div>
+      <div class="bg-[#FAF6EE] rounded-2xl p-3 border border-[#EBDCCB] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-full bg-sahara-clay/10 text-sahara-deepClay font-bold flex items-center justify-center text-sm font-cairo" id="pModalAvatar">
+            ح
+          </div>
+          <div>
+            <div class="flex items-center gap-1">
+              <h4 id="pModalSeller" class="text-xs font-bold text-stone-900"></h4>
+              <i class="fa-solid fa-circle-check text-blue-500 text-[10px]"></i>
+            </div>
+            <p class="text-[10px] text-stone-500">حرفية منزلية بعين صالح</p>
+          </div>
+        </div>
+        <button onclick="toggleFavoriteCurrentModal()" id="pModalFavBtn" class="text-stone-400 hover:text-sahara-clay text-base p-1">
+          <i class="fa-regular fa-heart"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <a id="pModalWhatsApp" href="#" target="_blank" class="bg-sahara-palm hover:bg-emerald-800 text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5 shadow-sm">
+          <i class="fa-brands fa-whatsapp text-sm"></i>
+          <span>طلب عبر واتساب</span>
+        </a>
+        <a id="pModalCall" href="#" class="bg-sahara-dark hover:bg-black text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-phone text-xs text-sahara-gold"></i>
+          <span>اتصال مباشر</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-sahara-dark text-white text-xs px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-2 transform transition-all duration-300 -translate-y-24 opacity-0 pointer-events-none">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toastMsg">تمت العملية بنجاح!</span>
+  </div>
+
+  <script>
+    // 1. جميع قصور وأحياء عين صالح الرسمية (18 منطقة محددة بدقة)
+    const IN_SALAH_ZONES = [
+      // القصور
+      "قصر ساهلة الغربية",
+      "قصر ساهلة الشرقية",
+      "قصر حاسي لحجار",
+      "قصر إيقسطن",
+      "بلدية إينغر",
+      "قصر جواليل",
+      "قصر البركة",
+      // الأحياء
+      "عين صالح وسط المدينة",
+      "حي ديانسي",
+      "حي لا شاريط",
+      "شارع القنطار",
+      "حي الضاية",
+      "حي الجديد",
+      "حي أقبور",
+      "قصر المرابطين",
+      "حي السلام",
+      "حي تراقة",
+      "حي الحدب"
+    ];
+
+    // 2. المجالات الـ 12 مرتبة حسب الأبرز في عين صالح مع إيموجي ديكوري (شباح)
+    // المجالات مع إضافة الكوافيرات وتجهيز العرائس
+const HOME_CATEGORIES = [
+  { id: 'توزيعات', name: 'توزيعات وهدايا', shbah: '🎁' },
+  { id: 'حلويات الأعراس والمناسبات', name: 'حلويات الأعراس', shbah: '🧁' },
+  { id: 'كوافيرات وتجهيز العرائس', name: 'كوافيرات وحلاقة وماكياج', shbah: '💄' },
+  { id: 'فرق طبخ الأعراس', name: 'فرق طبخ الأعراس والولائم', shbah: '👨‍🍳' },
+  { id: 'فرق الزهو والأفراح', name: 'فرق الزهو والمديح', shbah: '🥁' },
+  { id: 'مملحات', name: 'مملحات ومقبلات', shbah: '🥐' },
+  { id: 'بيع الحنة ومستلزماتها', name: 'بيع الحنة ومستلزماتها', shbah: '🌿' },
+  { id: 'خياطة', name: 'خياطة وقنادر', shbah: '👗' },
+  { id: 'طبخ منزلي', name: 'طبخ منزلي ومخبوزات', shbah: '🥘' },
+  { id: 'أطباق تقليدية', name: 'أطباق تقليدية وتديكلت', shbah: '🍲' },
+  { id: 'حلي وإكسسوارات', name: 'حلي وإكسسوارات العروس', shbah: '💍' },
+  { id: 'البخور والعطور', name: 'البخور والعطور الصحراوية', shbah: '🪵' },
+  { id: 'طرز يدوي وكروشي', name: 'طرز يدوي وكروشي', shbah: '🪡' }
+];
+
+    // رقم هاتف واتساب المديرة لاستقبال الطلبات بريفي
+    const ADMIN_WHATSAPP_NUMBER = "213699193770"; // ضعي رقمكِ هنا بصيغة دولية
+
+    const state = {
+      selectedCategory: 'all',
+      selectedZone: 'all',
+      searchQuery: '',
+      isAdminUnlocked: false,
+      adminPin: '2026',
+      favorites: [1, 2],
+      activeModalProduct: null,
+
+      // عينات تجريبية منتقاة لمجتمع عين صالح
+      products: [
+        {
+          id: 1,
+          title: 'علب توزيعات سبوع ومناسبات فخمة بالليزر (50 علبة)',
+          category: 'توزيعات',
+          wilaya: 'عين صالح وسط المدينة',
+          price: 3800,
+          sellerName: 'توزيعات الفرح والسرور',
+          phone: '0661001122',
+          plan: 'الباقة المجانية (15 يوم)',
+          image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80',
+          desc: 'علب توزيعات راقية مع شوكولاتة وتطريز اسم المولود أو العروسين حسب الطلب.'
+        },
+        {
+          id: 2,
+          title: 'صينية بقلاوة اللوز ومقروط العسل بالتمر (60 حبة)',
+          category: 'حلويات الأعراس والمناسبات',
+          wilaya: 'قصر ساهلة الشرقية',
+          price: 4500,
+          sellerName: 'حلويات أم البنين الصالحية',
+          phone: '0550334455',
+          plan: 'الباقة الفصلية',
+          image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80',
+          desc: 'حلويات أعراس مشكلة معسلة بالسمن البلدي ونكهة الزهر الحر.'
+        },
+        {
+          id: 3,
+          title: 'تشكيلة صالي كورني وميني بيتزا وبوراك للأعراس',
+          category: 'مملحات',
+          wilaya: 'حي ديانسي',
+          price: 3200,
+          sellerName: 'مملحات وبهاء تديكلت',
+          phone: '0770667788',
+          plan: 'الباقة الشهرية',
+          image: 'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?w=600&auto=format&fit=crop&q=80',
+          desc: 'مملحات مشكلة طازجة ومقرمشة تحضر يوم المناسبة مباشرة.'
+        },
+        {
+          id: 4,
+          title: 'قندورة صيفية كتان بارد صدور مكرامي وتطريز يدوي',
+          category: 'خياطة',
+          wilaya: 'قصر المرابطين',
+          price: 3500,
+          sellerName: 'خياطة أنامل الصحراء',
+          phone: '0655889900',
+          plan: 'الباقة المجانية (15 يوم)',
+          image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&auto=format&fit=crop&q=80',
+          desc: 'قنادر مناسبة لحرارة الصيف بأقمشة قطنية خفيفة ومريحة، تفصيل حسب المقاس.'
+        },
+        {
+          id: 5,
+          title: 'قصعة كسكسي تديكلت بلحم الإبل والخضار المجففة',
+          category: 'أطباق تقليدية',
+          wilaya: 'بلدية إينغر',
+          price: 2500,
+          sellerName: 'مطبخ البركة الأصيل',
+          phone: '0671223344',
+          plan: 'الباقة السنوية',
+          image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
+          desc: 'كسكسي تديكلت حار وخاثر بلحم الإبل البلدي مخدوم في الدار للعزومات.'
+        },
+        {
+          id: 6,
+          title: 'بخور صحراوي أصلي دوان وحناء طبيعية نقية',
+          category: 'البخور والعطور',
+          wilaya: 'حي تراقة',
+          price: 1800,
+          sellerName: 'أصالة العطور الصالحية',
+          phone: '0560114477',
+          plan: 'الباقة الشهرية',
+          image: 'https://images.unsplash.com/photo-1607006311874-984e7f3c4db8?w=600&auto=format&fit=crop&q=80',
+          desc: 'خلطة بخور تدوم أياماً في البيت وحناء ورقية ناعمة للأفراح.'
+        },
+        // عينة كوافيرة منزلية وتجهيز العرائس
+        {
+          id: 10,
+          title: 'تجهيز كامل للعرائس: تسريحات شعر، ماكياج بروفيسيونال مع التنقل للبيت',
+          category: 'كوافيرات وتجهيز العرائس',
+          wilaya: 'عين صالح وسط المدينة',
+          price: 18000,
+          sellerName: 'لمسات العروسة الصالحية',
+          phone: '0663778899',
+          plan: 'الباقة الفصلية',
+          image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&auto=format&fit=crop&q=80',
+          desc: 'ميكاب آرتست وحلاقة منزلية بأجود الماركات العالمية، تسريحات سهرة وعرائس فخمة، متوفر خدمة التنقل لمنازل وقصور عين صالح حسب الحجز المسبق.'
+        },
+        // عينة فرقة طبخ للأعراس والولائم
+        {
+          id: 9,
+          title: 'فرقة طباخات الخير لإعداد ولائم الأعراس والقصاع الكبيرة',
+          category: 'فرق طبخ الأعراس',
+          wilaya: 'عين صالح وسط المدينة',
+          price: 25000,
+          sellerName: 'طباخات البركة للمناسبات',
+          phone: '0662334455',
+          plan: 'الباقة السنوية',
+          image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80',
+          desc: 'طباخات محترفات بخبرة سنوات في تحضير قصاع الكسكسي بلحم الإبل والخروف، شربة الأعراس، وطواجن الضياف لجميع مناسباتكم في عين صالح وقصورها.'
+        },
+        // عينة فرقة الزهو للأفراح
+        {
+          id: 7,
+          title: 'فرقة زهرة الواحة للزهو والمديح النسائي وإحياء الأعراس',
+          category: 'فرق الزهو والأفراح',
+          wilaya: 'عين صالح وسط المدينة',
+          price: 15000,
+          sellerName: 'فرقة زهرة الواحة للزهو',
+          phone: '0661998877',
+          plan: 'الباقة السنوية',
+          image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=80',
+          desc: 'إحياء سهرات الأعراس، الحنة، والسبوع بأجواء تراثية تديكلتية، مدائح وأهازيج البارود والزهو الأصيل.'
+        },
+        // عينة بيع الحنة ومستلزمات العروس
+        {
+          id: 8,
+          title: 'طقم حنة العروس دوان نقية مرحية مع صينية الشمع والتزيين',
+          category: 'بيع الحنة ومستلزماتها',
+          wilaya: 'قصر ساهلة الغربية',
+          price: 3500,
+          sellerName: 'حنة وأصالة الصحراء',
+          phone: '0555443322',
+          plan: 'الباقة الفصلية',
+          image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80',
+          desc: 'حنة صحراوية أصلية خضراء صافية وريحتها زكية، مع قفازات، شمع العروسة وأشرطة التزيين الخاصة بليلة الحناء.'
+        }
+      ],
+
+      pendingSellers: [
+        {
+          id: 101,
+          storeName: 'إبداعات الماكرامي والكروشي',
+          category: 'كروشي',
+          wilaya: 'شارع القنطار',
+          phone: '~~ئ~~~~69112233',
+          plan: 'الباقة المجانية التجريبية (15 يوم باطل)',
+          amount: 0,
+          receiptInfo: 'طلب مجاني تجريبي (15 يوماً)',
+          bio: 'تزيين صوالين ومفارش طاولات مخدومة باليد.'
+        }
+      ],
+
+      activeSellers: [
+        { id: 1, name: 'توزيعات الفرح والسرور', category: 'توزيعات', wilaya: 'وسط المدينة', status: 'نشط' },
+        { id: 2, name: 'حلويات أم البنين الصالحية', category: 'حلويات الأعراس والمناسبات', wilaya: 'ساهلة الشرقية', status: 'نشط' },
+        { id: 3, name: 'مملحات وبهاء تديكلت', category: 'مملحات', wilaya: 'حي ديانسي', status: 'نشط' },
+        { id: 4, name: 'خياطة أنامل الصحراء', category: 'خياطة', wilaya: 'قصر المرابطين', status: 'نشط' }
+      ]
+    };
+
+    // ملء القوائم المنسدلة بالمناطق والأحياء
+    function populateZonesAndCategories() {
+      const zoneSelects = [
+        document.getElementById('wilayaFilter'),
+        document.getElementById('sellerWilaya'),
+        document.getElementById('buyerWilayaInput')
+      ];
+
+      zoneSelects.forEach(select => {
+        if (!select) return;
+        const isFilter = select.id === 'wilayaFilter';
+        if (!isFilter) select.innerHTML = '';
+        IN_SALAH_ZONES.forEach(z => {
+          const opt = document.createElement('option');
+          opt.value = z;
+          opt.textContent = z;
+          select.appendChild(opt);
+        });
+      });
+
+      // ملء قائمة الاستمارة بالمجالات الـ 12
+      const sellerCatSelect = document.getElementById('sellerCategory');
+      if (sellerCatSelect) {
+        sellerCatSelect.innerHTML = '';
+        HOME_CATEGORIES.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = `${c.shbah} ${c.name}`;
+          sellerCatSelect.appendChild(opt);
+        });
+      }
+    }
+
+    // عرض شبكة المجالات الـ 12 كـ "شَباح" في واجهة السوق
+    // والضغط على أي منها ينقل الحرفية مباشرة لصفحة التسجيل مع تحديد المجال
+    function renderCategoriesHub() {
+      const container = document.getElementById('craftCategoriesHub');
+      if (!container) return;
+
+      container.innerHTML = HOME_CATEGORIES.map(cat => {
+        return `
+          <div 
+            onclick="goToJoinWithCategory('${cat.id}')"
+            class="shbah-card bg-white border border-[#EBDCCB] hover:border-sahara-clay rounded-2xl p-2.5 flex flex-col items-center justify-center text-center shadow-2xs hover:shadow-sm transition cursor-pointer relative overflow-hidden group">
+            
+            <!-- ديكور شباح لطيف في الزاوية -->
+            <span class="text-xl mb-1 shbah-icon">${cat.shbah}</span>
+            <span class="text-[10px] font-bold text-stone-800 line-clamp-1 leading-tight group-hover:text-sahara-clay">${cat.name}</span>
+            <span class="text-[8px] text-sahara-palm font-semibold mt-0.5">انضمي الآن ←</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // التوجيه المباشر للتسجيل عند الضغط على أي تخصص
+    function goToJoinWithCategory(catId) {
+      switchTab('seller-join');
+      const catSelect = document.getElementById('sellerCategory');
+      if (catSelect) catSelect.value = catId;
+      const formAnchor = document.getElementById('sellerFormAnchor');
+      if (formAnchor) formAnchor.scrollIntoView({ behavior: 'smooth' });
+      showToast(`تم تحديد تخصص "${catId}"، املئي بياناتكِ لتأكيد الانضمام!`);
+    }
+
+    function selectCategory(catId) {
+      state.selectedCategory = catId;
+      renderProducts();
+    }
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+      const emptyState = document.getElementById('noProductsFound');
+      
+      const filtered = state.products.filter(item => {
+        const matchCategory = (state.selectedCategory === 'all') || (item.category === state.selectedCategory);
+        const matchZone = (state.selectedZone === 'all') || (item.wilaya.includes(state.selectedZone));
+        const matchSearch = item.title.toLowerCase().includes(state.searchQuery.toLowerCase()) || 
+                            item.sellerName.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+                            item.desc.toLowerCase().includes(state.searchQuery.toLowerCase());
+        return matchCategory && matchZone && matchSearch;
+      });
+
+      document.getElementById('itemsFoundBadge').innerText = `${filtered.length} معروضات`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(prod => {
+        const isFav = state.favorites.includes(prod.id);
+
+        return `
+          <div class="bg-white rounded-3xl overflow-hidden border border-[#EBDCCB] shadow-xs flex flex-col justify-between hover:shadow-md transition">
+            <div class="relative cursor-pointer" onclick="openProductModal(${prod.id})">
+              <img src="${prod.image}" alt="${prod.title}" class="w-full h-36 object-cover">
+              
+              <div class="absolute top-2 right-2">
+                <span class="bg-white/95 text-sahara-deepClay text-[8px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-0.5">
+                  <i class="fa-solid fa-circle-check text-blue-500 text-[8px]"></i> موثقة
+                </span>
+              </div>
+
+              <button 
+                onclick="event.stopPropagation(); toggleFavorite(${prod.id})" 
+                class="absolute top-2 left-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-xs shadow-xs transition ${isFav ? 'text-sahara-clay' : 'text-stone-400'}">
+                <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
+              </button>
+
+              <div class="absolute bottom-2 right-2 bg-stone-900/85 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-lg">
+                ${prod.price.toLocaleString()} دج
+              </div>
+            </div>
+
+            <div class="p-2.5 flex-1 flex flex-col justify-between space-y-2">
+              <div>
+                <div class="flex items-center gap-1 text-[9px] text-stone-400 mb-0.5">
+                  <i class="fa-solid fa-location-dot text-sahara-clay text-[8px]"></i>
+                  <span class="truncate">${prod.wilaya}</span>
+                </div>
+                <h4 class="text-xs font-bold text-stone-800 line-clamp-1 cursor-pointer" onclick="openProductModal(${prod.id})">${prod.title}</h4>
+                <p class="text-[10px] text-stone-500 line-clamp-1 mt-0.5">بأنامل: ${prod.sellerName}</p>
+              </div>
+
+              <a 
+                href="https://api.whatsapp.com/send?phone=213${prod.phone.replace(/^0/, '')}&text=السلام%20عليكم%20يا%20أختي،%20رأيت%20طلبك%20في%20دار%20الحرفية:%20${encodeURIComponent(prod.title)}" 
+                target="_blank"
+                class="w-full bg-emerald-50 hover:bg-emerald-100 text-sahara-palm border border-emerald-200 text-[11px] font-bold py-1.5 rounded-xl flex items-center justify-center gap-1 transition">
+                <i class="fa-brands fa-whatsapp text-sahara-palm text-xs"></i>
+                <span>اطلبي بالواتساب</span>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleSearch() {
+      state.searchQuery = document.getElementById('searchInput').value;
+      renderProducts();
+    }
+
+    function filterProducts() {
+      state.selectedZone = document.getElementById('wilayaFilter').value;
+      renderProducts();
+    }
+    function switchTab(tabId) {
+      const tabs = ['market', 'seller-join', 'buyer-profile', 'admin'];
+      tabs.forEach(t => {
+        const sec = document.getElementById(`tab-${t}`);
+        const navBtn = document.getElementById(`nav-btn-${t}`);
+        if (t === tabId) {
+          sec.classList.remove('hidden');
+          if (navBtn) {
+            navBtn.classList.remove('text-stone-400');
+            navBtn.classList.add('text-sahara-clay');
+          }
+        } else {
+          sec.classList.add('hidden');
+          if (navBtn) {
+            navBtn.classList.remove('text-sahara-clay');
+            navBtn.classList.add('text-stone-400');
+          }
+        }
+      });
+      document.getElementById('mainContainer').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // اختيار الباقة
+    function selectSellerPlan(planName, price) {
+      document.getElementById('sellerSelectedPlan').value = planName;
+      const anchor = document.getElementById('sellerFormAnchor');
+      if (anchor) anchor.scrollIntoView({ behavior: 'smooth' });
+      showToast(`تم اختيار ${planName}`);
+    }
+
+    // الحبكة الذكية: إرسال بيانات الاستمارة تلقائياً في رسالة واتساب بريفي للمديرة
+    function handleSellerSubmit(e) {
+      e.preventDefault();
+      const storeName = document.getElementById('sellerStoreName').value;
+      const category = document.getElementById('sellerCategory').value;
+      const wilaya = document.getElementById('sellerWilaya').value;
+      const phone = document.getElementById('sellerPhone').value;
+      const plan = document.getElementById('sellerSelectedPlan').value;
+      const bio = document.getElementById('sellerBio').value;
+
+      // تسجيل الطلب في حالة الانتظار داخل النظام
+      state.pendingSellers.unshift({
+        id: Date.now(),
+        storeName: storeName,
+        category: category,
+        wilaya: wilaya,
+        phone: phone,
+        plan: plan,
+        amount: plan.includes('8000') ? 8000 : (plan.includes('2500') ? 2500 : (plan.includes('1000') ? 1000 : 0)),
+        receiptInfo: plan.includes('باطل') ? 'طلب تجريبي مجاني' : 'بانتظار إرسال الوصل في الخاص',
+        bio: bio || 'حرفية منزلية بعين صالح.'
+      });
+
+      updateAdminCounts();
+      renderPendingList();
+
+      // نص الرسالة المهيأة للمديرة عبر الواتساب
+      const message = `السلام عليكم مديرة دار الحرفية عين صالح 🌴
+أرغب في فتح متجري المنزلي لديكم:
+• اسم المشروع: ${storeName}
+• الحرفة/المجال: ${category}
+• المنطقة/الحي: ${wilaya}
+• رقم هاتفي: ${phone}
+• الباقة المختارة: ${plan}
+• نبذة عن خدمتي: ${bio || 'لا يوجد'}
+
+أنتظر تواصلكم لإتمام التفعيل ومعلومات الدفع إن وجدت. شكراً!`;
+
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=${ADMIN_WHATSAPP_NUMBER}&text=${encodeURIComponent(message)}`;
+
+      // فتح الواتساب تلقائياً للمديرة
+      window.open(whatsappUrl, '_blank');
+
+      document.getElementById('sellerRegistrationForm').reset();
+      showToast("تم إرسال طلبكِ! فُتحت محادثة الواتساب مع المديرة لتأكيد حسابكِ.", "success");
+      
+      setTimeout(() => switchTab('market'), 1500);
+    }
+
+    function handleBuyerSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('buyerNameInput').value;
+      const wilaya = document.getElementById('buyerWilayaInput').value;
+      document.getElementById('buyerDisplayName').innerText = name;
+      document.getElementById('buyerDisplayWilaya').innerText = `الزبونة من: ${wilaya}`;
+      document.getElementById('userHeaderName').innerText = name.split(' ')[0];
+      
+      document.getElementById('buyerRegistrationBlock').innerHTML = `
+        <div class="text-center py-2 text-xs">
+          <p class="font-bold text-sahara-palm">✓ حسابكِ كزبونة نشط ومجاني بالكامل</p>
+        </div>
+      `;
+      showToast(`أهلاً بكِ يا ${name}!`, "success");
+    }
+
+    function toggleFavorite(prodId) {
+      const idx = state.favorites.indexOf(prodId);
+      if (idx !== -1) {
+        state.favorites.splice(idx, 1);
+        showToast("تم الحذف من المفضلة");
+      } else {
+        state.favorites.push(prodId);
+        showToast("تم الحفظ في المفضلة ❤️");
+      }
+      renderProducts();
+      renderFavorites();
+    }
+
+    function toggleFavoriteCurrentModal() {
+      if (state.activeModalProduct) {
+        toggleFavorite(state.activeModalProduct.id);
+        const isFav = state.favorites.includes(state.activeModalProduct.id);
+        const btn = document.getElementById('pModalFavBtn');
+        btn.innerHTML = `<i class="fa-${isFav ? 'solid' : 'regular'} fa-heart ${isFav ? 'text-sahara-clay' : ''}"></i>`;
+      }
+    }
+
+    function renderFavorites() {
+      const container = document.getElementById('favoritesList');
+      document.getElementById('favoritesCount').innerText = `${state.favorites.length} معروضات`;
+
+      if (state.favorites.length === 0) {
+        container.innerHTML = '<p class="text-center text-xs text-stone-400 py-4">لم تحفظي أي منتج بعد.</p>';
+        return;
+      }
+
+      const favProds = state.products.filter(p => state.favorites.includes(p.id));
+      container.innerHTML = favProds.map(p => `
+        <div class="flex items-center justify-between p-2 rounded-2xl bg-[#FAF6EE] border border-[#EBDCCB]">
+          <div class="flex items-center gap-2.5">
+            <img src="${p.image}" class="w-10 h-10 rounded-xl object-cover">
+            <div>
+              <h5 class="text-xs font-bold text-stone-800 line-clamp-1">${p.title}</h5>
+              <p class="text-[10px] text-sahara-clay font-bold">${p.price.toLocaleString()} دج • ${p.sellerName}</p>
+            </div>
+          </div>
+          <button onclick="toggleFavorite(${p.id})" class="text-stone-400 hover:text-red-500 p-2">
+            <i class="fa-solid fa-trash-can text-xs"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function openProductModal(prodId) {
+      const p = state.products.find(x => x.id === prodId);
+      if (!p) return;
+      state.activeModalProduct = p;
+
+      document.getElementById('pModalTitle').innerText = p.title;
+      document.getElementById('pModalCategory').innerText = p.category;
+      document.getElementById('pModalDesc').innerText = p.desc;
+      document.getElementById('pModalPrice').innerText = p.price.toLocaleString();
+      document.getElementById('pModalWilaya').innerText = p.wilaya;
+      document.getElementById('pModalPlan').innerText = p.plan;
+      document.getElementById('pModalSeller').innerText = p.sellerName;
+      document.getElementById('pModalAvatar').innerText = p.sellerName.charAt(0);
+      document.getElementById('pModalImg').src = p.image;
+
+      const rawPhone = p.phone.replace(/^0/, '');
+      document.getElementById('pModalWhatsApp').href = `https://api.whatsapp.com/send?phone=213${rawPhone}&text=السلام%20عليكم،%20أنا%20مهتمة%20بمنتجك%20(${encodeURIComponent(p.title)})%20من%20منصة%20دار%20الحرفية%20عين%20صالح`;
+      document.getElementById('pModalCall').href = `tel:0${rawPhone}`;
+
+      const isFav = state.favorites.includes(p.id);
+      document.getElementById('pModalFavBtn').innerHTML = `<i class="fa-${isFav ? 'solid' : 'regular'} fa-heart ${isFav ? 'text-sahara-clay' : ''}"></i>`;
+
+      document.getElementById('productDetailModal').classList.remove('hidden');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productDetailModal').classList.add('hidden');
+    }
+
+    // لوحة الإدارة
+    function requestAdminAccess() {
+      if (state.isAdminUnlocked) {
+        switchTab('admin');
+      } else {
+        document.getElementById('adminPinModal').classList.remove('hidden');
+      }
+    }
+
+    function closeAdminPinModal() {
+      document.getElementById('adminPinModal').classList.add('hidden');
+      document.getElementById('adminPinInput').value = '';
+    }
+
+    function verifyAdminPin() {
+      const entered = document.getElementById('adminPinInput').value.trim();
+      if (entered === state.adminPin) {
+        state.isAdminUnlocked = true;
+        closeAdminPinModal();
+        switchTab('admin');
+        showToast("مرحباً بكِ في لوحة الإدارة!", "success");
+      } else {
+        showToast("رمز غير صحيح. (الافتراضي 2026)");
+      }
+    }
+
+    function lockAdminSession() {
+      state.isAdminUnlocked = false;
+      switchTab('market');
+      showToast("تم قفل لوحة الإدارة");
+    }
+
+    function switchAdminView(view) {
+      if (view === 'pending') {
+          document.getElementById('adminViewPending').classList.remove('hidden');
+        document.getElementById('adminViewActive').classList.add('hidden');
+        document.getElementById('adminSubBtnPending').className = "flex-1 py-1.5 rounded-xl bg-white text-stone-900 shadow-xs flex items-center justify-center gap-1 transition";
+        document.getElementById('adminSubBtnActive').className = "flex-1 py-1.5 rounded-xl text-stone-600 flex items-center justify-center gap-1 transition";
+      } else {
+        document.getElementById('adminViewPending').classList.add('hidden');
+        document.getElementById('adminViewActive').classList.remove('hidden');
+        document.getElementById('adminSubBtnActive').className = "flex-1 py-1.5 rounded-xl bg-white text-stone-900 shadow-xs flex items-center justify-center gap-1 transition";
+        document.getElementById('adminSubBtnPending').className = "flex-1 py-1.5 rounded-xl text-stone-600 flex items-center justify-center gap-1 transition";
+        renderActiveSellersList();
+      }
+    }
+
+    function updateAdminCounts() {
+      const count = state.pendingSellers.length;
+      document.getElementById('adminPendingCount').innerText = count;
+      document.getElementById('pendingBadgeSub').innerText = count;
+      document.getElementById('adminActiveCount').innerText = state.activeSellers.length;
+      
+      const dot = document.getElementById('navAdminBadge');
+      if (count > 0) dot.classList.remove('hidden');
+      else dot.classList.add('hidden');
+    }
+
+    function renderPendingList() {
+      const container = document.getElementById('adminPendingContainer');
+      if (state.pendingSellers.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-6 bg-white rounded-2xl border border-[#EBDCCB] p-4">
+            <i class="fa-solid fa-circle-check text-2xl text-emerald-500 mb-1"></i>
+            <p class="text-xs font-bold text-stone-700">لا توجد طلبات معلقة</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = state.pendingSellers.map(s => `
+        <div class="bg-white border border-[#EBDCCB] rounded-2xl p-3.5 space-y-2.5 shadow-xs">
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="text-xs font-bold text-stone-900">${s.storeName}</h4>
+              <p class="text-[10px] text-stone-500">📍 ${s.wilaya} • ${s.category}</p>
+              <p class="text-[10px] text-emerald-700 font-bold mt-0.5">الباقة: ${s.plan}</p>
+            </div>
+            <span class="text-[10px] bg-amber-50 text-sahara-deepClay font-bold px-2 py-0.5 rounded-full border border-amber-200">
+              ${s.amount} دج
+            </span>
+          </div>
+          <div class="flex items-center gap-2 pt-1 border-t border-stone-100">
+            <button onclick="approveSeller(${s.id})" class="flex-1 bg-sahara-palm hover:bg-emerald-800 text-white font-bold text-xs py-2 rounded-xl transition">
+              تأكيد وتفعيل المتجر فوراً
+            </button>
+            <button onclick="rejectSeller(${s.id})" class="px-3 bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl">
+              رفض
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function approveSeller(sellerId) {
+      const idx = state.pendingSellers.findIndex(s => s.id === sellerId);
+      if (idx !== -1) {
+        const s = state.pendingSellers[idx];
+        state.activeSellers.push({ id: s.id, name: s.storeName, category: s.category, wilaya: s.wilaya, status: 'نشط' });
+        state.products.unshift({
+          id: Date.now(),
+          title: `معروضات وخدمات من ${s.storeName}`,
+          category: s.category,
+          wilaya: s.wilaya,
+          price: 2500,
+          sellerName: s.storeName,
+          phone: s.phone,
+          plan: s.plan,
+          image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
+          desc: s.bio
+        });
+
+        // تحديث المداخيل إن كانت باقة مدفوعة
+        if (s.amount > 0) {
+          const revElem = document.getElementById('adminTotalRevenue');
+          let current = parseInt(revElem.innerText.replace(',', '')) || 0;
+          revElem.innerText = (current + s.amount).toLocaleString();
+        }
+        state.pendingSellers.splice(idx, 1);
+        updateAdminCounts();
+        renderPendingList();
+        renderProducts();
+        showToast(`تم تفعيل متجر "${s.storeName}" بنجاح!`, "success");
+      }
+    }
+
+    function rejectSeller(sellerId) {
+      state.pendingSellers = state.pendingSellers.filter(s => s.id !== sellerId);
+      updateAdminCounts();
+      renderPendingList();
+      showToast("تم رفض الطلب.");
+    }
+
+    function renderActiveSellersList() {
+      const container = document.getElementById('adminActiveContainer');
+      container.innerHTML = state.activeSellers.map(v => `
+        <div class="bg-white border border-[#EBDCCB] rounded-2xl p-2.5 flex items-center justify-between shadow-xs">
+          <div>
+            <h5 class="text-xs font-bold text-stone-900">${v.name}</h5>
+            <p class="text-[10px] text-stone-400">📍 ${v.wilaya} • ${v.category}</p>
+          </div>
+          <span class="text-[9px] bg-emerald-50 text-sahara-palm px-2 py-1 rounded-lg font-bold">${v.status}</span>
+        </div>
+      `).join('');
+    }
+
+    function toggleAuthModal() {
+      switchTab('buyer-profile');
+    }
+
+    function showToast(msg, type = 'info') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('-translate-y-24', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('-translate-y-24', 'opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+
+    window.onload = function() {
+      populateZonesAndCategories();
+      renderCategoriesHub();
+      renderProducts();
+      renderPendingList();
+      renderFavorites();
+      updateAdminCounts();
+    };
+  </script>
+</body>
+</html>
