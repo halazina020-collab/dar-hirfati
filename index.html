@@ -22,6 +22,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="دار الحرفية">
   <link rel="apple-touch-icon" href="icon-192.jpg">
+  <link rel="manifest" href="manifest.json">
   <script>
     tailwind.config = {
       theme: {
@@ -548,8 +549,7 @@
         <h3 class="text-sm font-bold font-cairo text-stone-900">منطقة المديرة الخاصة</h3>
         <p class="text-[10px] text-stone-500">أدخلي الرمز السري للتحكم في المنصة</p>
       </div>
-      <input type="password" id="adminPinInput" placeholder="الرمز (الافتراضي: 2026)" class="w-full text-center tracking-widest text-base font-bold bg-[#FAF6EE] border border-[#EBDCCB] rounded-xl py-2 focus:outline-none focus:border-sahara-clay">
-      <div class="flex gap-2">
+     <input type="password" id="adminPinInput" placeholder="أدخلي الرمز السري" class="w-full p-3 border rounded-xl focus:outline-none"/>
         <button onclick="verifyAdminPin()" class="flex-1 bg-sahara-dark hover:bg-black text-white text-xs font-bold py-2.5 rounded-xl transition">
           دخول
         </button>
@@ -650,20 +650,21 @@
 
     // 2. المجالات الـ 12 مرتبة حسب الأبرز في عين صالح مع إيموجي ديكوري (شباح)
     // المجالات مع إضافة الكوافيرات وتجهيز العرائس
+// المجالات الـ 13 مع مسارات صوركِ الحقيقية داخل مجلد images
 const HOME_CATEGORIES = [
-  { id: 'توزيعات', name: 'توزيعات وهدايا', shbah: '🎁' },
-  { id: 'حلويات الأعراس والمناسبات', name: 'حلويات الأعراس', shbah: '🧁' },
-  { id: 'كوافيرات وتجهيز العرائس', name: 'كوافيرات وحلاقة وماكياج', shbah: '💄' },
-  { id: 'فرق طبخ الأعراس', name: 'فرق طبخ الأعراس والولائم', shbah: '👨‍🍳' },
-  { id: 'فرق الزهو والأفراح', name: 'فرق الزهو والمديح', shbah: '🥁' },
-  { id: 'مملحات', name: 'مملحات ومقبلات', shbah: '🥐' },
-  { id: 'بيع الحنة ومستلزماتها', name: 'بيع الحنة ومستلزماتها', shbah: '🌿' },
-  { id: 'خياطة', name: 'خياطة وقنادر', shbah: '👗' },
-  { id: 'طبخ منزلي', name: 'طبخ منزلي ومخبوزات', shbah: '🥘' },
-  { id: 'أطباق تقليدية', name: 'أطباق تقليدية وتديكلت', shbah: '🍲' },
-  { id: 'حلي وإكسسوارات', name: 'حلي وإكسسوارات العروس', shbah: '💍' },
-  { id: 'البخور والعطور', name: 'البخور والعطور الصحراوية', shbah: '🪵' },
-  { id: 'طرز يدوي وكروشي', name: 'طرز يدوي وكروشي', shbah: '🪡' }
+  { id: 'توزيعات', name: 'توزيعات وهدايا', img: 'images/touzi3at.jpg' },
+  { id: 'حلويات الأعراس والمناسبات', name: 'حلويات الأعراس', img: 'images/7alaouiyat.jpg' },
+  { id: 'كوافيرات وتجهيز العرائس', name: 'كوافيرات وحلاقة وماكياج', img: 'images/kwafira.jpg' },
+  { id: 'فرق طبخ الأعراس', name: 'فرق طبخ الأعراس والولائم', img: 'images/tabkhe7-a3ras.jpg' },
+  { id: 'فرق الزهو والأفراح', name: 'فرق الزهو والمديح', img: 'images/khbit.jpg' },
+  { id: 'مملحات', name: 'مملحات ومقبلات', img: 'images/momallahat.jpg' },
+  { id: 'بيع الحنة ومستلزماتها', name: 'بيع الحنة ومستلزماتها', img: 'images/henna.jpg' },
+  { id: 'خياطة', name: 'خياطة وقنادر', img: 'images/khiyata.jpg' },
+  { id: 'طبخ منزلي', name: 'طبخ منزلي ومخبوزات', img: 'images/tabkh-manzeli.jpg' },
+  { id: 'أطباق تقليدية', name: 'أطباق تقليدية وتديكلت', img: 'images/koskos.jpg' },
+  { id: 'حلي وإكسسوارات', name: 'حلي وإكسسوارات العروس', img: 'images/accessoires.jpg' },
+  { id: 'البخور والعطور', name: 'البخور والعطور الصحراوية', img: 'images/3otour-bakhor.jpg' },
+  { id: 'طرز يدوي وكروشي', name: 'طرز يدوي وكروشي', img: 'images/krochi-tarz.jpg' }
 ];
 
     // رقم هاتف واتساب المديرة لاستقبال الطلبات بريفي
@@ -682,50 +683,50 @@ const HOME_CATEGORIES = [
       products: [
         {
           id: 1,
-          title: 'علب توزيعات سبوع ومناسبات فخمة بالليزر (50 علبة)',
+          title: 'علب توزيعات (50 علبة)',
           category: 'توزيعات',
           wilaya: 'عين صالح وسط المدينة',
           price: 3800,
           sellerName: 'توزيعات الفرح والسرور',
           phone: '0661001122',
           plan: 'الباقة المجانية (15 يوم)',
-          image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80',
+          image: 'images/3oleb-taouzi3at.jpg',
           desc: 'علب توزيعات راقية مع شوكولاتة وتطريز اسم المولود أو العروسين حسب الطلب.'
         },
         {
           id: 2,
-          title: 'صينية بقلاوة اللوز ومقروط العسل بالتمر (60 حبة)',
+          title: 'صينية بقلاوة اللوز  (60 حبة)',
           category: 'حلويات الأعراس والمناسبات',
           wilaya: 'قصر ساهلة الشرقية',
           price: 4500,
           sellerName: 'حلويات أم البنين الصالحية',
           phone: '0550334455',
           plan: 'الباقة الفصلية',
-          image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80',
+          image: 'images/sinia-baklaoua.jpg',
           desc: 'حلويات أعراس مشكلة معسلة بالسمن البلدي ونكهة الزهر الحر.'
         },
         {
           id: 3,
-          title: 'تشكيلة صالي كورني وميني بيتزا وبوراك للأعراس',
+          title: 'تشكيلة صالي ',
           category: 'مملحات',
           wilaya: 'حي ديانسي',
           price: 3200,
           sellerName: 'مملحات وبهاء تديكلت',
           phone: '0770667788',
           plan: 'الباقة الشهرية',
-          image: 'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?w=600&auto=format&fit=crop&q=80',
+          image: 'images/tachkilat-momalahat.jpg',
           desc: 'مملحات مشكلة طازجة ومقرمشة تحضر يوم المناسبة مباشرة.'
         },
         {
           id: 4,
-          title: 'قندورة صيفية كتان بارد صدور مكرامي وتطريز يدوي',
+          title: 'قندورة صيفية كتان بارد ',
           category: 'خياطة',
           wilaya: 'قصر المرابطين',
           price: 3500,
           sellerName: 'خياطة أنامل الصحراء',
           phone: '0655889900',
           plan: 'الباقة المجانية (15 يوم)',
-          image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&auto=format&fit=crop&q=80',
+          image: 'images/jebba.jpg',
           desc: 'قنادر مناسبة لحرارة الصيف بأقمشة قطنية خفيفة ومريحة، تفصيل حسب المقاس.'
         },
         {
@@ -737,7 +738,7 @@ const HOME_CATEGORIES = [
           sellerName: 'مطبخ البركة الأصيل',
           phone: '0671223344',
           plan: 'الباقة السنوية',
-          image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
+          image: 'images/9as3at-koskos.jpg',
           desc: 'كسكسي تديكلت حار وخاثر بلحم الإبل البلدي مخدوم في الدار للعزومات.'
         },
         {
@@ -749,20 +750,20 @@ const HOME_CATEGORIES = [
           sellerName: 'أصالة العطور الصالحية',
           phone: '0560114477',
           plan: 'الباقة الشهرية',
-          image: 'https://images.unsplash.com/photo-1607006311874-984e7f3c4db8?w=600&auto=format&fit=crop&q=80',
+          image: 'images/bakhoor.jpg',
           desc: 'خلطة بخور تدوم أياماً في البيت وحناء ورقية ناعمة للأفراح.'
         },
         // عينة كوافيرة منزلية وتجهيز العرائس
         {
           id: 10,
-          title: 'تجهيز كامل للعرائس: تسريحات شعر، ماكياج بروفيسيونال مع التنقل للبيت',
+          title: 'تجهيز كامل للعرائس',
           category: 'كوافيرات وتجهيز العرائس',
           wilaya: 'عين صالح وسط المدينة',
           price: 18000,
           sellerName: 'لمسات العروسة الصالحية',
           phone: '0663778899',
           plan: 'الباقة الفصلية',
-          image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&auto=format&fit=crop&q=80',
+          image: 'images/tajhiz-3rayes.jpg',
           desc: 'ميكاب آرتست وحلاقة منزلية بأجود الماركات العالمية، تسريحات سهرة وعرائس فخمة، متوفر خدمة التنقل لمنازل وقصور عين صالح حسب الحجز المسبق.'
         },
         // عينة فرقة طبخ للأعراس والولائم
@@ -775,7 +776,7 @@ const HOME_CATEGORIES = [
           sellerName: 'طباخات البركة للمناسبات',
           phone: '0662334455',
           plan: 'الباقة السنوية',
-          image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80',
+          image: 'images/tabe7-a3ras.jpg',
           desc: 'طباخات محترفات بخبرة سنوات في تحضير قصاع الكسكسي بلحم الإبل والخروف، شربة الأعراس، وطواجن الضياف لجميع مناسباتكم في عين صالح وقصورها.'
         },
         // عينة فرقة الزهو للأفراح
@@ -801,7 +802,7 @@ const HOME_CATEGORIES = [
           sellerName: 'حنة وأصالة الصحراء',
           phone: '0555443322',
           plan: 'الباقة الفصلية',
-          image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80',
+          image: 'images/ta9em-henna.jpg',
           desc: 'حنة صحراوية أصلية خضراء صافية وريحتها زكية، مع قفازات، شمع العروسة وأشرطة التزيين الخاصة بليلة الحناء.'
         }
       ],
@@ -864,23 +865,19 @@ const HOME_CATEGORIES = [
     // عرض شبكة المجالات الـ 12 كـ "شَباح" في واجهة السوق
     // والضغط على أي منها ينقل الحرفية مباشرة لصفحة التسجيل مع تحديد المجال
     function renderCategoriesHub() {
-      const container = document.getElementById('craftCategoriesHub');
-      if (!container) return;
+  const container = document.getElementById('craftCategoriesHub');
+  if (!container) return;
 
-      container.innerHTML = HOME_CATEGORIES.map(cat => {
-        return `
-          <div 
-            onclick="goToJoinWithCategory('${cat.id}')"
-            class="shbah-card bg-white border border-[#EBDCCB] hover:border-sahara-clay rounded-2xl p-2.5 flex flex-col items-center justify-center text-center shadow-2xs hover:shadow-sm transition cursor-pointer relative overflow-hidden group">
-            
-            <!-- ديكور شباح لطيف في الزاوية -->
-            <span class="text-xl mb-1 shbah-icon">${cat.shbah}</span>
-            <span class="text-[10px] font-bold text-stone-800 line-clamp-1 leading-tight group-hover:text-sahara-clay">${cat.name}</span>
-            <span class="text-[8px] text-sahara-palm font-semibold mt-0.5">انضمي الآن ←</span>
-          </div>
-        `;
-      }).join('');
-    }
+  container.innerHTML = HOME_CATEGORIES.map(cat => {
+    return `
+      <div onclick="goToJoinWithCategory('${cat.id}')" class="shbah-card bg-white border border-[#EBDCCB] hover:border-sahara-clay p-2 rounded-2xl text-center cursor-pointer transition-all flex flex-col items-center justify-center shadow-xs">
+        <img src="${cat.img}" class="w-11 h-11 rounded-xl object-cover mb-1 shadow-xs" alt="${cat.name}">
+        <span class="text-[10px] font-bold text-stone-800 line-clamp-1 leading-tight">${cat.name}</span>
+        <span class="text-[8px] text-sahara-palm font-semibold mt-0.5">انضمي الآن ←</span>
+      </div>
+    `;
+  }).join('');
+}
 
     // التوجيه المباشر للتسجيل عند الضغط على أي تخصص
     function goToJoinWithCategory(catId) {
@@ -1305,6 +1302,19 @@ const HOME_CATEGORIES = [
         toast.classList.add('-translate-y-24', 'opacity-0', 'pointer-events-none');
       }, 3000);
     }
+    let clickCount = 0;
+const logoElement = document.getElementById('siteLogo'); // تأكدي أن اللوغو يحمل هذا الـ id
+
+if (logoElement) {
+  logoElement.addEventListener('click', () => {
+    clickCount++;
+    if (clickCount >= 5) {
+      clickCount = 0;
+      // فتح نافذة كلمة السر
+      document.getElementById('adminLoginModal').classList.remove('hidden');
+    }
+  });
+}
 
     window.onload = function() {
       populateZonesAndCategories();
